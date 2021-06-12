@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+</head>
+<body>
+    <script>
+        // 논리 연산과 if문을 활용한 로그인 로직 구현
+
+        let userId = prompt('아이디를 입력해주세요', '');
+        let password;
+
+        if (userId == "Admin") {
+            password = prompt('비밀번호를 입력해주세요', '');
+        } else{
+            alert('id가 틀렸습니다');
+        }
+
+        if (password == "TheMaster") {
+            alert('환영합니다!');
+        } else if (password == "" || password == null) {
+            alert("취소되었습니다");
+        } else {
+            alert ('인증에 실패했습니다');
+        }
+    </script>
+</body>
+</html>
