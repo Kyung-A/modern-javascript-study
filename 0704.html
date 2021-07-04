@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>0704 모던 자바스크립트</title>
+</head>
+
+<body>
+
+    <script>
+        // pow(x, n) 제곱 함수 만들기
+
+        let x = prompt('x 값을 입력해주세요', '');
+        let n = prompt('n 값을 입력해주세요', '');
+        let power = 0;
+
+        function pow(num1, num2) {
+            power = num1;
+
+            for (let i = 1; i < num2; i++) {
+                power = power * num1;
+            }
+            alert(`${x}의 ${n} 제곱 값은 ${power}입니다`);
+        }
+
+
+        if (n < 1) {
+            alert("n 숫자는 자연수여야합니다. 다시 입력해주세요.");
+        } else {
+            pow(x, n);
+        }
+
+    </script>
+</body>
+
+</html>
