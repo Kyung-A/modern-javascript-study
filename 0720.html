@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>0720 모던 자바스크립트 | 메서드와 this</title>
+</head>
+<body>
+
+    <script>
+
+        // 계산기 만들기
+        let calculator = {
+            read: function() {
+                this.num1 = +prompt("첫번째 숫자를 입력해주세요", "");
+                this.num2 = +prompt("두번째 숫자를 입력해주세요", "");
+            },
+            sum: function() {
+                return this.num1 + this.num2;
+            },
+            mul: function() {
+                return this.num1 * this.num2;
+            }
+        }     
+        
+        console.log(calculator);
+        calculator.read();
+        alert(calculator.sum());
+        alert(calculator.mul());
+
+
+        
+        // 체이닝
+        let ladder = {
+            step: 0,
+            up() {
+                this.step++;
+                return this; // 메서드를 호출할때마다 객체(오브젝트=ladder) 자신을 반환
+            },
+            down() {
+                this.step--;
+                return this;
+            },
+            showStep() {
+                alert(this.step);
+                return this;
+            }
+        };
+
+        ladder.up();
+        ladder.up();
+        ladder.down();
+        ladder.showStep();
+
+        // ladder.up().up().down().showStep();
+    </script>
+    
+</body>
+</html>
