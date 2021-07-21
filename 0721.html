@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>0721 모던자바스크립트 | new 연산자와 생성자 함수</title>
+</head>
+<body>
+    <script>
+        // 함수 두개로 동일한 객체 만들기
+        let obj = {}
+
+        function A() {
+            return obj;
+        }
+
+        function B() {
+            return obj;
+        }
+
+        let a = new A();
+        let b = new B();
+
+        console.log(a == b);
+
+        
+
+        // 계산기 만들기
+        function Calculator() {
+            this.read = function() {
+                this.num1 = +prompt("첫번째 숫자를 입력해주세요", 0);
+                this.num2 = +prompt("두번째 숫자를 입력해주세요", 0);
+            };
+            this.sum = function() {
+              return this.num1 + this.num2;  
+            };
+            this.mul = function() {
+              return this.num1 * this.num2;  
+            };
+        }
+
+        let calculator = new Calculator();
+        calculator.read();
+        alert("합 : " + calculator.sum());
+        alert("곱 : " + calculator.mul());
+
+        
+
+        // 누산기 만들기
+         function Accumulator(startingValue) {
+             this.value = startingValue;
+
+             this.read = function() {
+                this.value += +prompt("숫자를 입력해주세요", 0);
+                return this;
+             };
+
+         }
+
+         let accumulator = new Accumulator(1);
+
+         accumulator.read().read().read().value;
+
+         console.log(accumulator.value);
+    </script>
+</body>
+</html>
