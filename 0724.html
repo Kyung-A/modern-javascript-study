@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>0724 | 모던 자바스크립트 자료구조와 숫자형(숫자형~문자형)</title>
+</head>
+<body>
+    <script>
+
+        // 숫자를 입력할때까지 반복하기
+        function readNumber() {
+            let num;
+
+            do {
+                num = prompt("숫자를 입력해주세요", 0);
+            }while (!isFinite(num));
+            
+            if(num === null || num === '') return null;
+
+            return +num;
+        }
+
+        alert(`읽기 : ${readNumber()}`);
+
+        
+        // 매개변수 두개 사이의 랜덤 숫자를 얻은 후 정수로 변환하기
+        function random(min, max) {
+            let num = min + Math.random() * (max - min);
+            num = Math.trunc(num);
+            return num;
+        }
+
+        console.log(random(1, 10));
+
+        
+        
+        // 첫 글자를 대문자로 변경하기
+         function ucFirst(str) {
+            if (!str) return str;
+
+            let upper = str[0].toUpperCase();
+            let sle = str.slice(1);
+            
+            return str = upper + sle;
+         }
+
+         console.log(ucFirst("john"));
+
+
+
+         // 스팸 문자 걸러내기
+         function checkSpam(str) {
+            let spam1 = "viagra";
+            let spam2 = "xxx";
+
+            let lower = str.toLowerCase();
+
+             if(lower.includes(spam1) || lower.includes(spam2)) {
+                return true;
+             } else {
+                 return false;
+             }
+         }
+
+         console.log(checkSpam('buy ViAgRA now'));
+
+
+
+         // 문자열 줄이기
+         function truncate(str, maxlength) {
+            if(str.length > maxlength) {
+                let str1 = str.slice(maxlength - 1);
+                str1 = '...';
+                let str2 =  str.slice(0, maxlength - 1) + str1;
+
+                return str2;
+            } else {
+                return str;
+            }
+
+         }
+
+         console.log(truncate("What I'd like to tell on this topic is:", 20));
+         console.log(truncate("Hi everyone!", 20));
+
+
+         // 숫자만 뽑아내는 함수
+         function extractCurrencyValue(str) {
+             let slc = str.slice(1);
+             return parseInt(slc);
+         }
+
+         console.log(extractCurrencyValue('$231') === 231);
+    </script>
+</body>
+</html>
