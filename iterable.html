@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iterable</title>
+</head>
+
+<body>
+    <script>
+        // 이터러블 객체는 배열을 일반화한 객체이다 (배열은 대표적인 이터러블)
+        // 이터러블이라는 개념을 사용하면 어떤 객체에든 for..of 반복문을 적용할 수 있다
+        let range = {
+            from: 1,
+            to: 5,
+        };
+
+        // Symbol.iterator는 반드시 이터레이터를 반환해야합니다
+        // 1.for..of 최초 호출 시, Symbol.iterator가 호출
+        range[Symbol.iterator] = function () {
+            // 2. 이후 for..of는 반환된 이터레이터 객체만을 대상으로 동작하는데, 이때 다음 값도 정해진다
+            return {
+                current: this.from,
+                last: this.to,
+
+                // 3. for..of 반복문에 의해 반복마다 next()가 호출
+                next() {
+                    // 4. next()는 값을 객체 {done:.., value:..}형태로 반환해야한다
+                    if (this.current <= this.last) {
+                        return { done: false, value: this.current++ };
+                    } else {
+                        return { done: true };
+                    }
+                }
+            }
+        }
+
+        for (let num of range) {
+            // console.log(num);
+        }
+
+
+        // 이터레이터 객체와 반복대상을 객체를 합쳐서 range 자체를 이터레이터로 만들수있다
+        let range2 = {
+            from: 1,
+            to: 5,
+
+            [Symbol.iterator]() {
+                this.current = this.from;
+                return this;
+            },
+
+            next() {
+                if (this.current <= this.to) {
+                    return { done: false, value: this.current++ };
+                } else {
+                    return { done: true }
+                }
+            }
+        };
+
+        for(let num of range2) {
+            // console.log(num);
+        }
+
+
+        // 문자열은 이터러블입니다
+        for (let char of 'test') {
+            // console.log(char);
+        }
+        for (let char2 of "✅🥰🙋‍♀️📖") {
+            // console.log(char2);
+        }
+
+        // 이터레이터를 명시적으로 호출하기 (반복과정을 제어할 수 있는게 장점)
+        let str = 'hello';
+        let iterator = str[Symbol.iterator]();
+
+        while (true) {
+            let result = iterator.next();
+
+            if(result.done) break;
+
+            // console.log(result.value);
+        }
+
+        // 진짜 배열로 만들기
+        let arrayList = {
+            0: 'Hello',
+            1: 'world',
+            length:2,
+        };
+        // Array.from은 이터러블이냐 유사배열이냐를 검토 후 새로운 배열로 반환
+        // let arr = Array.from(range);
+        // console.log(arr.pop());
+
+
+        // 두번째 인수는 매핑함수를 선택적으로 넘겨줄 수 있다
+        // 넘겨주면 새로운 배열엔 매핑함수를 적용하고 반횐 값이 추가된다
+        let arrayList2 = {
+            0: 0,
+            1: 1,
+            2: 2,
+            3: 3,
+            4: 4,
+            5: 5,
+            length: 6,
+        };
+
+        let arr = Array.from(arrayList2, num => num * num);
+        // console.log(arr);
+
+        function slice(str, start, end) {
+            return Array.from(str).slice(start, end).join('');
+        }
+
+        console.log(slice(str, 1, 3));
+    </script>
+</body>
+
+</html>
