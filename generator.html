@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>generator</title>
+</head>
+<body>
+    <script>
+        // 제너레이터란? 여러 개의 값을 필요에 따라 하나씩 반환(yield)
+
+        // 제너레이터 함수
+        function* generateSequence() {
+            yield 1;
+            yield 2;
+            return 3;
+        }
+
+        // 제너레이더 함수는 제너레이터 객체를 생성
+        let generator = generateSequence();
+        // 첫번째 산출값을 반환
+        let one = generator.next();
+        // 두번째 산출값을 반환
+        let two = generator.next();
+        // return문 실행, 함수 종료
+        let three = generator.next();
+
+        console.log(JSON.stringify(three)); // value, done 반환, done은 함수 코드 실행이 끝났냐 말았냐
+
+
+        // for .. of 반복문 사용 가능
+        function* generateSequence() {
+            yield 1;
+            yield 2;
+            yield 3; // return으로 하면 마지막 값이 반환되지 않으므로 yield로 작성해줘야함
+        }
+
+        let generator = generateSequence();
+
+        for(let value of generator) {
+            // console.log(value);
+        }
+
+        // 제너레이터는 이터러블 객체이므로 스프레드시트 연산자 사용가능 => 배열 요소로 바꿔줌
+        let sequence = [0, ...generateSequence()];
+
+
+        // 이터러블 대신 제너레이터 사용
+        let range = {
+            from: 1,
+            to: 5,
+
+            *[Symbol.iterator]() {
+                for(let value = this.from; value <= this.to; value++) {
+                    yield value;
+                }
+            }
+        };
+
+        console.log([...range]);
+
+        // 제너레이터 컴포지션 (제너레이터에 다른 제너레이터를 끼워넣기)
+        function* generateSequence(start, end) {
+            for(let i = start; i <= end; i++) yield i;
+        }
+
+        function* generateSequenceCodes() {
+            yield* generateSequence(48, 57);
+            yield* generateSequence(65, 90);
+            yield* generateSequence(97, 122);
+        }
+
+        let str = '';
+
+        for(let code of generateSequenceCodes()) {
+            str += String.fromCharCode(code);
+        }
+
+        
+
+        // 제너레이터 컴포지션 양방향으로 사용하기
+            function* gen() {
+
+                try {
+                    // 질문을 제너레이터 밖 코드에 던지고 답을 기다립니다
+                    let result = yield "2 + 2 = ?";
+                    
+                    alert('위에서 에러가 던져졌기 때문에 실행 흐름은 여기까지 다 다르지 못한다');
+                } catch(e) {
+                    alert(e);
+                }
+            }
+
+            let generator = gen();
+
+            let question = generator.next().value; // yield는 valye를 반환
+
+            generator.throw(new Error('데이터 베이스에서 답을 찾지 못했습니다'));
+    </script>
+</body>
+</html>
