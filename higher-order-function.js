@@ -58,8 +58,9 @@ findFunction(findA, (el) => el > 0); // 1,2,3,4 모두 다 해당되지만 그 �
 // 제공된 조건 기능을 충족하는 배열의 첫번째 요소 인덱스를 반환
 function findIndexFunction(arr, func) {
   for (let [index, el] of arr.entries()) {
-    // entries() 메서드는 배열의 값들을 돌면서 key와 value 값을 반환
+    // entries() 메서드는 arr의 각 index에 대한 key, value를 반환할 수 있는 Iterator 객체를 반환한다
     const result = func(el);
+    // console.log([index, el]); // [0, 1], [1, 2], [2, 3] ...
     if (result) return index;
   }
   return -1;
@@ -67,5 +68,81 @@ function findIndexFunction(arr, func) {
 
 const findIndexA = [1, 2, 3, 4];
 findIndexFunction(findIndexA, (el) => el > 10); // 해당되지 않으므로 -1을 반환
-findIndexFunction(findIndexA, (el) => el > 3); // 3보다 큰건 4이고 4의 index는 3 반환
-findIndexFunction(findIndexA, (el) => el > 0); // 모두 다 해당되지만 가장 첫번째는 1이므로 1의 인덱스는 0 반환
+// findIndexFunction(findIndexA, (el) => el > 3); // 3보다 큰건 4이고 4의 index는 3 반환
+// findIndexFunction(findIndexA, (el) => el > 0); // 모두 다 해당되지만 가장 첫번째는 1이므로 1의 인덱스는 0 반환
+
+// Array.prototype.fiter 원리
+// 조건을 통과하는 모든 요소를 모아 새로운 배열로 반환
+function filterFunction(arr, func) {
+  const newArr = [];
+
+  for (let el of arr) {
+    const result = func(el); // 불리언 값으로 result에 담김=
+    if (result) newArr.push(el); // result에서 true인 el 요소가 newArr에 담김
+  }
+  return newArr;
+}
+
+const filterA = [1, 2, 3, 4, 5, 6, 7, 8];
+filterFunction(filterA, (el) => el % 2 === 1); // 나머지가 1인 배열 요소를 newArr에 push하여 [1, 3, 5, ,7] 배열을 반환
+
+// Array.prototype.map 원리
+// 배열 내의 모든 요소 각각에 대하여 주어진 함수를 호출한 결과를 모아 새로운 배열을 반환
+function mapFunction(arr, func) {
+  const newArr = new Array(arr.length); // arr의 길이에 맞게 newArr의 길이가 고정됨
+
+  for (let [index, el] of arr.entries()) {
+    const result = func(el, index); // 요소와 인덱스 값을 함수에 전달
+    // console.log(el); // 2, undefined, 4, undefined
+    if (result) newArr[index] = result;
+  }
+  return newArr;
+  // mapA의 length 4이기 때문에 무조건 lenght에 맞게 값을 넣어야함.
+  // 근데 넘어온 최종 요소는 2개뿐.
+  // 넘어온 요소의 기존 index 위치는 0, 2였으니 [2, empty, 4, empty]이 최종 값으로 반환 (undefined는 empty로 채워짐)
+}
+
+const mapA = [1, 2, 3, 4];
+mapFunction(mapA, (el, index) => {
+  // console.log(index); // 0, 1, 2, 3
+  if (el % 2 === 1) {
+    // 조건에 통과하는 값은 1, 3
+    return el + 1; // 2, 4가 최종 반환
+  }
+});
+
+// Array.protorype.reduce 원리
+// 배열의 각 요소에 대해 주어진 reduce 함수를 실행하고 하나의 결과값을 반환
+function reduceFunction(arr, func, first) {
+  let total = first ? first : arr[0]; // first가 무슨...  callback 함수인가봄
+
+  for (let [index, el] of arr.entries()) {
+    // console.log(total); // 1, 3, 6, 10. arr를 요소를 더해서 반환값을 다음 요소와 더하고 나온 값들인듯 (1, 1+2=3, 3+3=6, 6+4=10)
+    if (index !== arr.length - 1) {
+      // arr.length - 1 은 3이다
+      // index가 3이 아니면
+      // 이 조건에 해당하는 index는 0, 1, 2이다. total의 lenght를 3으로 맞춘건가..?
+      // console.log(total); // 1, 3, 6
+      total = func(total, arr[index + 1]); // arr[index + 1]는 2, 3, 4이다. total+(arr[index + 1])인건가? 1+2=3, 3+3=6, 6+4=10
+      // console.log(total); // 3, 6, 10
+    }
+  }
+  // console.log(total); // 10
+  return total;
+}
+
+const reduceA = [1, 2, 3, 4];
+reduceFunction(reduceA, (acc, crr) => acc + crr); // 10 반환. acc가 total이고 crr이 arr[index+1]임
+
+// functiondp return 값이 없으면 undefined를 반환. 이때 total + total이 아닌 total = undefined가 되어비린다
+reduceFunction(reduceA, (acc, crr) => {
+  if (crr % 2 === 0) {
+    return acc + crr; // 3은 나머지가 1이기에 undefined이다 그러면서 undefined에 숫자를 더하려고 하니 NaN이 반환됨
+  }
+});
+
+reduceFunction(reduceA, (acc, crr) => {
+  if (crr % 2 === 1) {
+    return acc + crr; // undefined이다. 요소 3에만 해당이 되어서
+  }
+});
